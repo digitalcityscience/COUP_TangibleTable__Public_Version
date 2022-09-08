@@ -1,0 +1,112 @@
+{
+    "type": "FeatureCollection",
+    "name": "buildings_fixed_g42_g48",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "id": null,
+                "AOG": null,
+                "GFK": null,
+                "WGF": null,
+                "area_planning_type": "building",
+                "building_height": 53.9,
+                "building_id": "G11",
+                "elevation_at_bottom": 7.5,
+                "floor_area": 629.78,
+                "land_use_detailed_type": "residential",
+                "land_use_suggested": "- to be defined -",
+                "number_of_stories": 13,
+                "city_scope_id": "B-11"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            10.010035184254926,
+                            53.534059501582504,
+                            7.5
+                        ],
+                        [
+                            10.010327660537751,
+                            53.53401529462951,
+                            7.5
+                        ],
+                        [
+                            10.010201645252659,
+                            53.533719370770115,
+                            7.5
+                        ],
+                        [
+                            10.00992756496894,
+                            53.533806758162534,
+                            7.5
+                        ],
+                        [
+                            10.010035184254926,
+                            53.534059501582504,
+                            7.5
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": null,
+                "AOG": null,
+                "GFK": null,
+                "WGF": null,
+                "area_planning_type": "building",
+                "building_height": 34.7,
+                "building_id": "G12",
+                "elevation_at_bottom": 7.5,
+                "floor_area": 547.52,
+                "land_use_detailed_type": "residential",
+                "land_use_suggested": "- to be defined -",
+                "number_of_stories": 7,
+                "city_scope_id": "B-12"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            10.010449058044909,
+                            53.53386179691165,
+                            7.5
+                        ],
+                        [
+                            10.010506220326437,
+                            53.53398760073027,
+                            7.5
+                        ],
+                        [
+                            10.011056083791818,
+                            53.53389892317424,
+                            7.5
+                        ],
+                        [
+                            10.01099893509186,
+                            53.533773119496075,
+                            7.5
+                        ],
+                        [
+                            10.010449058044909,
+                            53.53386179691165,
+                            7.5
+                        ]
+                    ]
+                ]
+            }
+        }
+          ]
+}

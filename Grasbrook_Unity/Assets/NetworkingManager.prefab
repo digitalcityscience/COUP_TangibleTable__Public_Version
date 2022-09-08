@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1236820486557990553
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1236820486557990555}
+  - component: {fileID: 1236820486557990554}
+  - component: {fileID: 1236820486557990532}
+  - component: {fileID: 1236820486557990533}
+  m_Layer: 0
+  m_Name: NetworkingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &1236820486557990555
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236820486557990553}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.9454908, y: -28.199554, z: 10.187288}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1236820486557990554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236820486557990553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de1f3914eca2c894499061cb3ccb2100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConfigData: {fileID: 4900000, guid: 95362a6429dfd864ca017883eb3b6019, type: 3}
+  buildingManager: {fileID: 0}
+  ExampleWindResult: {fileID: 4900000, guid: 89d88acfb1775484e9ad531ab0cd0aee, type: 3}
+  ExampleNoiseResult: {fileID: 4900000, guid: 4422d4a475571814282266ded0a45198, type: 3}
+  windSimulation: {fileID: 0}
+  noiseSimulation: {fileID: 0}
+  abmSimulation: {fileID: 0}
+  waitingSwirl: {fileID: 0}
+  dataMat: {fileID: 2100000, guid: e8f52292f6f30ac4cbe57357768eda88, type: 2}
+  LoginData: []
+--- !u!114 &1236820486557990532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236820486557990553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92881b380fd3d29468de1ed02d1e7289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingMat: {fileID: 2100000, guid: 84ebbaeb966ed704fb2c10f18e716f4e, type: 2}
+  AllBuildingVertices: {fileID: 0}
+  calibrationMarkers: {fileID: 0}
+  canvas: {fileID: 0}
+  quarterTable: {fileID: 0}
+  buildingManager: {fileID: 0}
+  tableSurface: {fileID: 0}
+  dialTransform: {fileID: 0}
+  tableNW: {fileID: 0}
+  tableSE: {fileID: 0}
+  motionThreshhold: 0.001
+  dialSmoothThreshhold: 0.01
+  rotationSmoothing: 0.75
+  motionSmoothing: 0.75
+  OffsetMaskAruco: {fileID: 0}
+  aruco250: {fileID: 0}
+  realPos: {x: 0, y: 0}
+  detectedPos: {x: 0, y: 0}
+  mmError: {x: 0, y: 0}
+--- !u!114 &1236820486557990533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236820486557990553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e140992639dc34893bf58df7a62f23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingManager: {fileID: 0}
+  CityPyo: {fileID: 1236820486557990554}
+  ConfigData: {fileID: 4900000, guid: 95362a6429dfd864ca017883eb3b6019, type: 3}
+  ExampleWindResult: {fileID: 4900000, guid: 89d88acfb1775484e9ad531ab0cd0aee, type: 3}
+  ExampleNoiseResult: {fileID: 4900000, guid: 4422d4a475571814282266ded0a45198, type: 3}
+  ExampleAbmResult: {fileID: 4900000, guid: b3576ab4c544f804893b082306a010fd, type: 3}
+  windSimulation: {fileID: 0}
+  noiseSimulation: {fileID: 0}
+  abmSimulation: {fileID: 0}
+  waitingSwirl: {fileID: 0}
+  dataMat: {fileID: 2100000, guid: e8f52292f6f30ac4cbe57357768eda88, type: 2}

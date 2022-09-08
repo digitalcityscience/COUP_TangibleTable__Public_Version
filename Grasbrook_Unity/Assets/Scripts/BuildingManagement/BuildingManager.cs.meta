@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 5eb79256551c1c140a77d8d70344d673
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - groundTruthCityModelJSON: {fileID: 4900000, guid: 474ecb32b7c50c04c977e10d077ce9e8, type: 3}
+  - markerToBuildingJSON: {instanceID: 0}
+  - outlineVertices_1: {instanceID: 0}
+  - outlineVertices_2: {instanceID: 0}
+  - invisibleMat: {instanceID: 0}
+  - buildingMat: {instanceID: 0}
+  - marker_SE: {instanceID: 0}
+  - marker_NW: {instanceID: 0}
+  - vertexPrefab: {instanceID: 0}
+  - tableSurface: {instanceID: 0}
+  - landMat: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
