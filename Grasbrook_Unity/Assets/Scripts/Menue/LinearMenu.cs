@@ -141,7 +141,7 @@ public class LinearMenu : MonoBehaviour
             else if (simulationSetup.NoiseValueLinearMenu == 1)
             {
                 int valueKey = 1;
-                min = 10;
+                min = 0;
                 max = 90;
                 string labelString = "Traffic volume:";
                 string valueString = GlobalVariable.GlobalNoiseCarVolume.ToString() + "%";

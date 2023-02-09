@@ -18,7 +18,9 @@ public class BuildingManager : MonoBehaviour
 {
     // JSON files that store the building positions of the design as well as the 
     // outlines of the 2 main landmasses
+    public bool usingTwoModules;
     public UnityEngine.TextAsset groundTruthCityModelJSON;
+    public UnityEngine.TextAsset groundTruthCityModelJSON_halfTable;
     public UnityEngine.TextAsset markerToBuildingJSON;
     public UnityEngine.TextAsset outlineVertices_1;
     public UnityEngine.TextAsset outlineVertices_2;
@@ -75,14 +77,21 @@ public class BuildingManager : MonoBehaviour
         {
             MarkerToID[entry.Value] = entry.Key;
         }
-  
 
-        //DrawLandPolygons(outlineVertices_1, "Oswaldkai");
-        //DrawLandPolygons(outlineVertices_2, "Veddel");
 
         // Deserialises the initial city model (where the building vertices are placed, its types, names, use-cases etc.) 
         // into a collection we can worth it
-        groundTruthcityModelCollection = GeoJSON.GeoJSONObject.Deserialize(groundTruthCityModelJSON.text);
+        if (!usingTwoModules)
+        {
+            groundTruthcityModelCollection = GeoJSON.GeoJSONObject.Deserialize(groundTruthCityModelJSON.text);
+            print("using full table");
+        }
+        else if (usingTwoModules)
+        {
+            groundTruthcityModelCollection = GeoJSON.GeoJSONObject.Deserialize(groundTruthCityModelJSON_halfTable.text);
+            print("using half table");
+        }
+        
 
         PopulateTableFromGeoJSONFeatureCollection(groundTruthcityModelCollection);
         CreateEmptyParentForEachEntry(MarkerToGameObject);

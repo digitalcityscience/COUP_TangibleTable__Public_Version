@@ -2,6 +2,9 @@ any log files
 *.log
 
 
+# buildings etc
+assets/files/*
+
 # credentials
 Grasbrook_Unity (1)/Assets/Files/config.json
 

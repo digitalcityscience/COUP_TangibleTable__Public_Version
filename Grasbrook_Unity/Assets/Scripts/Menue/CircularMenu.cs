@@ -5,6 +5,9 @@ public class CircularMenu : MonoBehaviour
 {
     Transform arrowTransform;
 
+    [SerializeField] // this corection is needed throug the diffrence between the north 0 in the real world and the z-axis 0 in the unity Scene
+    float rotationCorrection; //60
+
     #region SerializeGameObjects
     [SerializeField]
     GameObject circularValue;
@@ -18,6 +21,8 @@ public class CircularMenu : MonoBehaviour
     GameObject valueBox;
     [SerializeField]
     GameObject label;
+    [SerializeField]
+    GameObject directionPerl;
     #endregion
 
     WindSimulation dataController_Wind;
@@ -86,10 +91,10 @@ public class CircularMenu : MonoBehaviour
         string valueString = GlobalVariable.GlobalWindDirection.ToString() + " °";
         valueText.text = valueString;
 
-        windTrails.gameObject.transform.rotation = Quaternion.Euler(0, arrowRot+60, 0);
-        //windTrails.gameObject.transform.rotation = Quaternion.Euler(0, arrowRot + 90 - 30, 0);
+        windTrails.gameObject.transform.rotation = Quaternion.Euler(0, arrowRot+rotationCorrection, 0); 
+        directionPerl.transform.localEulerAngles = new Vector3(0, 0, -arrowRot);
 
-        dataController_Wind.windScenario.wind_direction = (int)arrowRot+60;
+        dataController_Wind.windScenario.wind_direction = (int)arrowRot+ (int)rotationCorrection;
         int valueKey = 0;
         legendChanger.ChangeLegendInforamtion("wind" , GlobalVariable.GlobalWindDirection, valueKey);
     }

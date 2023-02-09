@@ -8,27 +8,11 @@ using System;
 using Newtonsoft.Json;
 using System.IO;
 
-
-
-// brauchen wir das hier überhaupt noch?
-public class CalculationApiAuth
-{
-    // enter your credentials
-    public string username = "USERNAME"; 
-    public string password = "PASSWORD";
-}
-
 [Serializable]
 public class SingleTaskResult
 {
     public string taskId;
 }
-
-public class GroupTaskResult
-{
-    public string result;
-}
-
 
 public class CalculationModules_Interface : MonoBehaviour
 {
@@ -76,7 +60,7 @@ public class CalculationModules_Interface : MonoBehaviour
 
     bool currentlyLoading = false;
 
-    string windGroupTaskUUID;
+    string windTaskUUID;
     string noiseTaskUUID;
 
     GameObject windResult = null;
@@ -95,12 +79,14 @@ public class CalculationModules_Interface : MonoBehaviour
     //new connection principal 
     private string windCalculationRoute = null;
     private string windSingleTaskResultRoute = null;
-    private string windGroupTaskResultRoute = null;
+    private string windResultRoute = null;
 
     private string noiseCalculationRoute = null;
     private string noiseResultRoute = null;
 
     private string abmRequestRoute = null;
+
+    private bool loadingFinisch = false;
 
     public bool CurrentlyLoading { get => currentlyLoading; set => currentlyLoading = value; }
     public GameObject NoiseResult { get => noiseResult; set => noiseResult = value; }
@@ -117,9 +103,8 @@ public class CalculationModules_Interface : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        windCalculationRoute = ConfigData + "wind/windtask";
-        windSingleTaskResultRoute = ConfigData + "wind/tasks/";
-        windGroupTaskResultRoute = ConfigData + "wind/grouptasks/";
+        windCalculationRoute = ConfigData + "wind/trigger_calculation";
+        windResultRoute = ConfigData + "wind/collect_results/";
 
         noiseCalculationRoute = ConfigData + "noise/task";
         noiseResultRoute = ConfigData + "noise/tasks/";
@@ -129,50 +114,10 @@ public class CalculationModules_Interface : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    // update building positions on cityPyo before triggering calculation
-        //    StartCoroutine(CityPyo.PushBuildingPositions(buildingManager.UpdateAndReturnOutlinePositions()));
-        //    TryWind();
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.N))
-        //{
-        //    // update building positions on cityPyo before triggering calculation
-        //    StartCoroutine(CityPyo.PushBuildingPositions(buildingManager.UpdateAndReturnOutlinePositions()));
-        //    TryNoise();
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-        //    // update building positions on cityPyo before triggering calculation
-        //    StartCoroutine(CityPyo.PushBuildingPositions(buildingManager.UpdateAndReturnOutlinePositions()));
-        //    TryABM();
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    StopCoroutine(CalculateWind());
-        //    StopCoroutine(CalculateWind());
-        //    StopCoroutine(PullWindResults());
-
-        //    StopCoroutine(CalculateNoise());
-        //    StopCoroutine(CalculateNoise());
-        //    StopCoroutine(PullNoiseResults());
-
-        //    waitingSwirl.SetActive(false);
-        //    CurrentlyLoading = false;
-
-        //    Debug.Log("S wurde gedrückt");
-
-        //    StopAllCoroutines();
-        //}
-
         if (currentlyLoading)
         {
             waitingSwirl.transform.Rotate(Vector3.up, 5);
         }
-
     }
 
     public void ActivateSimulation(string simName)
@@ -243,36 +188,14 @@ public class CalculationModules_Interface : MonoBehaviour
         }
         else
         {
-            Debug.Log("Receive Single Task UUID");
+            Debug.Log("Receive Task UUID");
             SingleTaskResult response = JsonConvert.DeserializeObject<SingleTaskResult>(request.downloadHandler.text);
-            // get UUID of calculation group task that will return the wind results.
-            StartCoroutine(SaveWindGroupTaskUUID(response.taskId));
+            windTaskUUID = response.taskId;
+
+            // get the wind results.
+            InvokeRepeating("GetWindResults", 0.1f, 2f);
 
         }       
-    }
-
-    // post current windScenario settings to calculation api return the resultUUID returned by API
-    public IEnumerator SaveWindGroupTaskUUID(string taskID)
-    {
-        Debug.Log("SingleTaskID: " + taskID);
-        var request = CreateGetRequest(windSingleTaskResultRoute + taskID);
-
-        yield return request.SendWebRequest();
-
-        if (request.error != null)
-        {
-            Debug.Log("Errno: " + request.error);
-        }
-        else
-        {
-            Debug.Log("Status Code" + request.responseCode);
-        
-            GroupTaskResult response = JsonConvert.DeserializeObject<GroupTaskResult>(request.downloadHandler.text);
-            
-            windGroupTaskUUID = response.result;
-            // start polling for results using windGroupTaskUUID
-            InvokeRepeating("GetWindResults", 0.1f, 2f);
-        }
     }
 
     void GetWindResults()
@@ -284,9 +207,9 @@ public class CalculationModules_Interface : MonoBehaviour
 
     IEnumerator PullWindResults()
     {
-        var request = CreateGetRequest(windGroupTaskResultRoute +  windGroupTaskUUID + "?result_format=png");
+        var request = CreateGetRequest(windResultRoute +  windTaskUUID + "?result_format=png");
 
-        Debug.Log("WindGroup Request is:" + " " + windGroupTaskResultRoute + windGroupTaskUUID + "?result_format=png");
+        Debug.Log("Wind Request is:" + " " + windResultRoute + windTaskUUID + "?result_format=png");
         yield return request.SendWebRequest();
     
         if (request.error != null)
@@ -299,7 +222,6 @@ public class CalculationModules_Interface : MonoBehaviour
             Debug.Log("Request Text: " + request.downloadHandler.text);
             print("TasksCompleted Count:" + windData.tasksCompleted);
             loadingbar.ChangeLoadingBar(windData.tasksCompleted, windData.tasksTotal);
-
 
             if(windData.grouptaskProcessed == true)
             {

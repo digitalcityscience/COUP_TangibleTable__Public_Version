@@ -20,21 +20,30 @@ public class LegendChanger : MonoBehaviour
     TextMeshProUGUI simDataFour;
     [SerializeField]
     TextMeshProUGUI simDataFive;
+    [SerializeField]
+    GameObject windRose;
+
 
     private string[] season = {"Spring", "Summer", "Autumn", "Winter"};
 
-    /// <summary>
-    /// 
+    private void Update()
+    {
+        float rot = GlobalVariable.GlobalWindDirection;
+
+    }
+
     /// </summary>
     /// <param name="sim"></param>
     /// <param name="value"></param>
     /// <param name="valueKey"></param>
+    /// </summary>
     public void ChangeLegendInforamtion(string sim, int value, int valueKey)
     {
         //1 = Noise
         if (sim == "noise")
         {
             simulationName.text = "Noise";
+            windRose.SetActive(false);
             if (valueKey == 0)
             {
                 simDataOne.text = "Traffic Speed:" + " " + value + "km/h";
@@ -57,6 +66,7 @@ public class LegendChanger : MonoBehaviour
         else if (sim == "wind")
         {
             simulationName.text = "Wind";
+            windRose.SetActive(true);
             if (valueKey == 0)
             {
                 simDataOne.text = "Wind Direction:" + " " + value +"°";
@@ -78,6 +88,7 @@ public class LegendChanger : MonoBehaviour
         //3 = ABM
         else if (sim == "abm")
         {
+            windRose.SetActive(false);
             simulationName.text = "Pedestrians";
             simDataOne.text = "Bridge to HafenCity:" + " " + GlobalVariable.GlobalABMBridgeToHC;
             simDataTwo.text = "Underpass to Veddel N:" + " " + GlobalVariable.GlobalABMUnderpassVN;
@@ -95,6 +106,7 @@ public class LegendChanger : MonoBehaviour
         //4 = SUN / Thermal Comfort
         else if (sim == "sun")
         {
+            windRose.SetActive(false);
             simulationName.text = "Thermal Comfort";
             simDataOne.text = "Season: " + " " + season[valueKey+1]; 
             simDataTwo.text = "Information Two: " + " " + "Something";

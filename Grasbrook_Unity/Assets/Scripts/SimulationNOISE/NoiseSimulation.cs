@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.IO;
 public class NoiseSimulation : MonoBehaviour
 {
 
@@ -56,24 +57,13 @@ public class NoiseSimulation : MonoBehaviour
         List<Vector2> vertexList = new List<Vector2>();
 
         Vector2 swcoords = new Vector2(noiseResponse.result.bbox_sw_corner[0][1], noiseResponse.result.bbox_sw_corner[0][0]);
-
-        //GameObject swsphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         Vector2 swunityCoords = buildingManager.ConvertToUnitySpace(swcoords);
-        //swsphere.transform.position = new Vector3(swunityCoords.x, 2, swunityCoords.y);
-        //swsphere.transform.localScale = new Vector3(8, 8, 8);
-        //swsphere.GetComponent<Renderer>().material.color = Color.yellow;
 
         for (int k = 0; k < noiseResponse.result.bbox_coordinates.Length; k++)
         {
             Vector2 coords = new Vector2(noiseResponse.result.bbox_coordinates[k][1], noiseResponse.result.bbox_coordinates[k][0]);
             vertexList.Add(buildingManager.ConvertToUnitySpace(coords));
-
-            //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             Vector2 unityCoords = buildingManager.ConvertToUnitySpace(coords);
-            //sphere.transform.position = new Vector3(unityCoords.x, 2, unityCoords.y);
-            //sphere.transform.localScale = new Vector3(5, 5, 5);
-            //sphere.name = k.ToString();
-            //sphere.GetComponent<Renderer>().material.color = Color.red;
         }
 
         byte[] tiffBytes = Convert.FromBase64String(noiseResponse.result.image_base64_string);
@@ -85,6 +75,14 @@ public class NoiseSimulation : MonoBehaviour
 
         Texture2D tex = new Texture2D(dimX, dimY);
         tex.filterMode = FilterMode.Point;
+
+        var dirPath = Application.dataPath + "/../SaveImages";
+
+        if (!Directory.Exists(dirPath))
+        {
+            Directory.CreateDirectory(dirPath);
+        }
+        File.WriteAllBytes(dirPath + "Image" + ".png", tiffBytes);
 
         tex.LoadImage(tiffBytes);
         tex.Apply();
@@ -140,12 +138,13 @@ public class NoiseSimulation : MonoBehaviour
 
         tex.Apply();
 
+
         vertexList.RemoveAt(vertexList.Count - 1);
 
         GameObject plane = buildingManager.GenerateSurface(vertexList, 0.2f, boxID, dataMat);
         plane.transform.parent = noiseParent.transform;
         plane.tag = "Simulation";
-        noiseParent.transform.position = new Vector3(-2, 3, 2);
+        //noiseParent.transform.position = new Vector3(-2, 3, 2);
         calculationModules.NoiseResult = noiseParent;
         calculationModules.CurrentlyLoading = false;
         calculationModules.DeactivateWaitingSwirl();

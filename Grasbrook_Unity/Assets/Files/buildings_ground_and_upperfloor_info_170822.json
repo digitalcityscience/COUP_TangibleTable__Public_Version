@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": null, "AOG": null, "GFK": null, "WGF": null, "building_height": 99.9, "building_id": "G99", "elevation_at_bottom": 5.0, "floor_area": 999.0, "number_of_stories": 99, "city_scope_id": "B-99", "upperfloor": { }, "groundfloor": { "area_planning_type": "building", "land_use_detailed_type": "commercialOffice", "land_use_suggested": "- to be defined -" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 10.01641485024234, 53.527790412141755, 5.0 ], [ 10.01785780896312, 53.529357071481805, 5.0 ], [ 10.018192319310193, 53.529271883757858, 5.0 ], [ 10.016732328553603, 53.527686729954134, 5.0 ], [ 10.01641485024234, 53.527790412141755, 5.0 ] ] ] } }
+]
+}
