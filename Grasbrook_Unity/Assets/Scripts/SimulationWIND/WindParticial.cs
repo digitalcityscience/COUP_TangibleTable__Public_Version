@@ -9,7 +9,7 @@ public class WindParticial : MonoBehaviour
 
     public void ChangeColor(int speedValue)
     {
-
+        print("SpeedValue = " +speedValue);
             if (speedValue <= 10)
             {
                 materials[1].SetColor("_EmissionColor", colors[0]);

@@ -118,20 +118,11 @@ public class TableInterface : MonoBehaviour
 
 	}
 
- //   private void FixedUpdate()
- //   {
- //       if (serverMessage != "")
- //       {
- //           ParsePositionUpdateFromTable(serverMessage);
- //           serverMessage = "";
- //       }
-	//}
-
     private void Update()
 	{
         if (serverMessage != "")
         {
-            ParsePositionUpdateFromTable(serverMessage);
+			ParsePositionUpdateFromTable(serverMessage);
             serverMessage = "";
         }
 
@@ -172,6 +163,7 @@ public class TableInterface : MonoBehaviour
 void ParsePositionUpdateFromTable(string jsonString)
 	{
 
+		
 		Dictionary<int, float[]> receivedMarkerPositions = JsonConvert.DeserializeObject<Dictionary<int, float[]>>(jsonString);
 
 		foreach (KeyValuePair<int, float[]> currentMarker in receivedMarkerPositions)
@@ -184,15 +176,12 @@ void ParsePositionUpdateFromTable(string jsonString)
 				GameObject buildingParent = buildingManager.MarkerToGameObject[currentMarker.Key];
 				GameObject buildingGeometry = buildingParent.transform.GetChild(0).gameObject;
 
-				//buildingGeometry.GetComponent<Renderer>().material = buildingMat;
 				buildingGeometry.layer = LayerMask.NameToLayer("Default");
-
-				//Debug.Log("Xposition:"+ currentMarker.Value[0] + "YPosition: "+ currentMarker.Value.YValue + "Rotation:"+ currentMarker.Value.RotationValue + "CameraID" + currentMarker.Value.CameraID);
 
 				int x = (int)currentMarker.Value[0] ;
                 int z = (int)currentMarker.Value[1];
 				float rot = currentMarker.Value[2];
-				string camerID = currentMarker.Value[3].ToString(); //this one is the new Value to identify with which camera ther Aruco Marker is scanned
+				string camerID = currentMarker.Value[3].ToString();
 
 				Vector2 p = calibrationSetupTables.ScaleToTables(x, z, camerID);
 
@@ -266,13 +255,12 @@ void ParsePositionUpdateFromTable(string jsonString)
 					Vector3 u = calibrationMarkers.transform.Find(currentMarker.Key.ToString()).transform.localPosition;
 
 					calibrationSetupTables.CalibrationTableConersNew(x, z, u, currentMarker.Key, cameraID);
-
 					calibrationSetupTables.TableCamConnecetion(cameraID);
                 }
 
 				// this is currently the surface dial. Marker-ID is mostly arbitrarily chosen but this is a marker that seems
 				// to get recognized pretty well in all orientations
-				if (currentMarker.Key == 58)
+				if (currentMarker.Key == 112)
 				{
 					if(Mathf.Abs(Vector3.Distance(dialTransform.transform.localPosition, new Vector3(p.x, 0, p.y))) > dialSmoothThreshhold)
                     {
@@ -326,7 +314,7 @@ void ParsePositionUpdateFromTable(string jsonString)
 		try
 		{
 			socketConnection = new TcpClient("localhost", 8052);
-			Byte[] bytes = new Byte[1024];
+			Byte[] bytes = new Byte[4*1024];//1024 was it before
 			while (true)
 			{
 				// Get a stream object for reading 				
@@ -341,9 +329,7 @@ void ParsePositionUpdateFromTable(string jsonString)
 						// Convert byte array to string message. 	
 
 						string newMsg = Encoding.ASCII.GetString(incomingData);
-						//Debug.Log("Server Message:" + serverMessage);
 						serverMessage = newMsg; // we need to store it to retrieve it in the main update thread
-						//Debug.Log("server message received as: " + serverMessage);
 					}
 				}
 			}

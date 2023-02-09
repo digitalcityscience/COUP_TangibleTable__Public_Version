@@ -10,7 +10,7 @@ using Blitzy.UnityRadialController;
 /// </summary>
 public class MenuSystem : MonoBehaviour
 {
-    public enum Screen { off, main, simulation, selection, hideSim, linearValue, circularValue, simSetup, steppedValue, execute, toggleSim, timeValue, abmSetup, sunMonth};
+    public enum Screen { off, main, simulation, selection, hideSim, linearValue, circularValue, simSetup, steppedValue, execute, toggleResult, timeValue, abmSetup, windSimulation, noiseSimulation, abmSimulation, saveSimulation};
 
 
     RadialMenu radialMenu;
@@ -22,47 +22,50 @@ public class MenuSystem : MonoBehaviour
     SimulationMenu simulationMenu;
     CalculationModules_Interface calculationModules;
     SimulationSetupMenu simSetupMenue;
-    HideActiveSimulation hideActiveSimulation;
-    ShowSimulation showSimulation;
+    ToggleResult toggleSimResult;
     TimeMenue timeMenu;
     AbmSetupMenu abmSetupMenu;
     SunSeasonMenu sunMonthMenu;
+    SwitchSimulations switchSimulations;
+    public SaveResultsAsImages saveResultsAsImages;
 
     Screen activeScreen;
 
-    public Texture simulationsSetup;
-    public Texture runsimulation;
-    public Texture selection;
-    public Texture choosesimulation;
-    public Texture hideSimulation;
-    public Texture lastSimulation;
+    public Texture SimulationsSetupTexture;
+    public Texture RunSimulationTexture;
+    public Texture SelectionTexture;
+    public Texture ToggleResultTexture;
+    public Texture WindSimulationTexture;
+    public Texture NoiseSimulationTexture;
+    public Texture AbmSimulationTexture;
+    public Texture SaveSimulation;
 
-    // "none" "noise" "wind" "abm" "sun"
+    SpriteRenderer sprite = new SpriteRenderer();
+
+    //string to choose between the Simulation:
+    //"none" "noise" "wind" "abm" "sun"
     string simulationName = "none";
 
     public string SimulationName { get => simulationName; set => simulationName = value; }
 
     private void Start()
     {
-
         GameObject menus = GameObject.Find("Menus");
         radialMenu = menus.GetComponent<RadialMenu>();
         circularMenu = menus.GetComponent<CircularMenu>();
         linearMenu = menus.GetComponent<LinearMenu>();
         selectionMenu = menus.GetComponent<SelectionMenu>();
-        simulationMenu = menus.GetComponent<SimulationMenu>();
         simSetupMenue = menus.GetComponent<SimulationSetupMenu>();
-        hideActiveSimulation = menus.GetComponent<HideActiveSimulation>();
-        showSimulation = menus.GetComponent<ShowSimulation>();
+        switchSimulations = menus.GetComponent<SwitchSimulations>();
+        toggleSimResult = menus.GetComponent<ToggleResult>();
         timeMenu = menus.GetComponent<TimeMenue>();
         abmSetupMenu = menus.GetComponent<AbmSetupMenu>();
         sunMonthMenu = menus.GetComponent<SunSeasonMenu>();
-
-
+        saveResultsAsImages = menus.GetComponent<SaveResultsAsImages>();
+       
         radialController = GameObject.Find("WheelController").GetComponent<RadialController>();
         calculationModules = GameObject.Find("NetworkingManager").GetComponent<CalculationModules_Interface>();
-        activeScreen = Screen.off;
-           
+        activeScreen = Screen.off;    
     }
 
     //Main Press function for the surface dial and the Menues
@@ -112,10 +115,6 @@ public class MenuSystem : MonoBehaviour
                 SwitchTo(Screen.simSetup);
                 break;
 
-            case Screen.sunMonth:
-                sunMonthMenu.Press();
-                break;
-
             default:
                 break;
         }
@@ -125,16 +124,17 @@ public class MenuSystem : MonoBehaviour
     // Open function to set where the main menu icons should be when the menu is opend
     void MainMenuOpen()
     {
-        radialController.rotationResolutionInDegrees = 30;
+        radialController.rotationResolutionInDegrees = 45;
         radialController.useAutoHapticFeedback = true;
 
-        radialMenu.AddEntry("Sim Setup", simulationsSetup, 30, .15f, Screen.simSetup);
-        radialMenu.AddEntry("Run Simulation", runsimulation, 90, .2f, Screen.execute);
-        radialMenu.AddEntry("Selection", selection, 140, .05f, Screen.selection);
-        radialMenu.AddEntry("Choose Simulation", choosesimulation, 220, .05f, Screen.simulation);
-        radialMenu.AddEntry("Active Sim", lastSimulation, 270, .1f, Screen.toggleSim);
-        radialMenu.AddEntry("Hide Sim", hideSimulation, 330, .1f, Screen.hideSim);
-        
+        radialMenu.AddEntry("Setup", SimulationsSetupTexture, 0, .15f, Screen.simSetup);
+        radialMenu.AddEntry("Calculate", RunSimulationTexture, 45, .2f, Screen.execute);
+        radialMenu.AddEntry("Selection", SelectionTexture, 90, .05f, Screen.selection);
+        radialMenu.AddEntry("Toggle", ToggleResultTexture, 135, .1f, Screen.toggleResult);
+        radialMenu.AddEntry("Wind", WindSimulationTexture, 180, .1f, Screen.windSimulation);
+        radialMenu.AddEntry("Noise", NoiseSimulationTexture, 225, .05f, Screen.noiseSimulation);
+        radialMenu.AddEntry("Abm", AbmSimulationTexture, 270, .1f, Screen.abmSimulation);
+        radialMenu.AddEntry("Save", SaveSimulation, 315, .1f, Screen.saveSimulation);
     }
 
    // function to switch between the diffrent menus
@@ -162,13 +162,23 @@ public class MenuSystem : MonoBehaviour
                 SwitchTo(Screen.off);
                 break;
 
-            case Screen.hideSim:
-                HideSimulation();
+            case Screen.noiseSimulation:
+                switchSimulations.SwitchBetweenSimulations("noise");
                 SwitchTo(Screen.main);
                 break;
 
-            case Screen.toggleSim:
-                ShowSimumlation();
+            case Screen.windSimulation:
+                switchSimulations.SwitchBetweenSimulations("wind");
+                SwitchTo(Screen.main);
+                break;
+
+            case Screen.abmSimulation:
+                switchSimulations.SwitchBetweenSimulations("abm");
+                SwitchTo(Screen.main);
+                break;
+
+            case Screen.toggleResult:
+                ToggleResults();
                 SwitchTo(Screen.main);
                 break;
 
@@ -192,8 +202,9 @@ public class MenuSystem : MonoBehaviour
                 abmSetupMenu.Open();
                 break;
 
-            case Screen.sunMonth:
-                sunMonthMenu.Open();
+            case Screen.saveSimulation:
+                saveResultsAsImages.TakeScreenShot();
+                SwitchTo(Screen.off);
                 break;
         }
 
@@ -203,10 +214,11 @@ public class MenuSystem : MonoBehaviour
     public void Longpress()
     {
         Input.mouseScrollDelta.Set(0, 0);
+
         print("LongPress");
     }
 
-    // OnrRotation gives the rotation value of the surface dial to the diffrent undermenues
+    // OnRotation gives the rotation value of the surface dial to the diffrent undermenues
     public void OnRotation(float numDegs)
     {
         switch (activeScreen)
@@ -246,8 +258,7 @@ public class MenuSystem : MonoBehaviour
                 abmSetupMenu.OnRotation(numDegs);
                 break;
 
-            case Screen.sunMonth:
-                sunMonthMenu.OnRotation(numDegs);
+            case Screen.saveSimulation:
                 break;
 
             default:
@@ -261,27 +272,18 @@ public class MenuSystem : MonoBehaviour
         calculationModules.ActivateSimulation(SimulationName);
     }
 
-    private void HideSimulation()
-    {
-        if(calculationModules.NoiseResult != null || calculationModules.WindResult != null || calculationModules.AbmResult != null)
-        {
-            hideActiveSimulation.HideOldSimulation(SimulationName);
-        }
-        else
-        {
-            Debug.Log("There is no Simulations that can be hided");
-        }
-    }
-
-    void ShowSimumlation()
+    /// <summary>
+    /// Connecting function to toggle between an active and deactive simulation result
+    /// </summary>
+    void ToggleResults()
     {
         if (calculationModules.NoiseResult != null || calculationModules.WindResult != null || calculationModules.AbmResult != null)
-        {
-            showSimulation.ShowOldSimulations(SimulationName);
+        { 
+            toggleSimResult.ToggleResultActivitation(SimulationName);
         }
         else
         {
-            Debug.Log("There is no Simulations that can be activated");
+            Debug.Log("There is no Simulations that can be toggled");
         }
         
     }

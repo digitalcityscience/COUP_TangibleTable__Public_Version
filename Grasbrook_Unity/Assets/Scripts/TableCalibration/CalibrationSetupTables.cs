@@ -67,6 +67,7 @@ public class CalibrationSetupTables : MonoBehaviour
 
 	[SerializeField]
 	private string[] tableNumber = new string[4];
+    [SerializeField]
 	private int calib = 0;
 	private int changeMarcerPos = 0;
 	private int calibrationNumber = 0;
@@ -127,7 +128,7 @@ public class CalibrationSetupTables : MonoBehaviour
 				break;
 
 			case 2:
-				if(cameraID == "130")
+				if(cameraID == tableNumber[1] && tableNumber[1] != tableNumber[0])
                 {
 					if (markerKey == 100 && sw1.tCoords.x == 0)
 					{
@@ -217,11 +218,11 @@ public class CalibrationSetupTables : MonoBehaviour
     {
 		if(calib == 1)
         {
-			tableNumber[0] = "721"; //umbedingt wieder automatisieren...
+			tableNumber[0] = cameraID;
 		}
 		else if (calib == 2)
         {
-			tableNumber[1] = "130";
+			tableNumber[1] = cameraID;
         }
 		else if (calib == 3)
 		{
@@ -231,10 +232,6 @@ public class CalibrationSetupTables : MonoBehaviour
 		{
 			tableNumber[3] = cameraID;
 		}
-        else
-        {
-			
-        }
 	}
 
 	/// <summary>
@@ -272,22 +269,12 @@ public class CalibrationSetupTables : MonoBehaviour
 
 	}
 
-	public Vector2 ScaleToTable(float x, float y)
+	public float scale(float tCoordsMin, float tCoordsMax, float uCoordsMin, float uCoordsMax, float position)
 	{
 
-		float convX = scale(sw0.tCoords.x, se0.tCoords.x, sw0.uCoords.x, se0.uCoords.x, x);
-		//float convY = scale(se.tCoords.y, ne.tCoords.y, se.uCoords.y, ne.uCoords.y, y);
-		// changed east to west for y because the NE-marker makes problems sometimes the NW-marker not, maybe it will help
-		float convY = scale(sw0.tCoords.y, nw0.tCoords.y, sw0.uCoords.y, nw0.uCoords.y, y);
-		return new Vector2(convX, convY);
-	}
-
-	public float scale(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
-	{
-
-		float OldRange = (OldMax - OldMin);
-		float NewRange = (NewMax - NewMin);
-		float NewValue = (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
-		return NewValue;
+		float tCoord = (tCoordsMax - tCoordsMin);
+		float uCoord = (uCoordsMax - uCoordsMin);
+		float newPosition = (((position - tCoordsMin) * uCoord) / tCoord) + uCoordsMin;
+		return newPosition;
 	}
 }

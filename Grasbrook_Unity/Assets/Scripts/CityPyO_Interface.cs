@@ -50,9 +50,7 @@ public class CityPyO_Interface : MonoBehaviour
     public Material dataMat;
 
     //This is the path to the .txt data with only the login datas for the simulations
-    
-    // TODO adapt to your local path
-    private string path = "C:/***/***/Documents/Grasbrook_Table_TrackingSoftware/login.txt";
+    private string path = "C:/Users/dmz-user/Documents/Grasbrook_Table_TrackingSoftware/login.txt";
     
     //Carefull!! if you change the order or anything in the login.txt you have to change it in the code too!!
     public String [] LoginData;
@@ -101,9 +99,17 @@ public class CityPyO_Interface : MonoBehaviour
         }
         else
         {
-            // 0 = username in the .txt - file
-            USR = LoginData[0];
-            LoginToCityPyO();
+            // 0 = username 4module || 2 for 2module in the .txt - file
+            if (buildingManager.usingTwoModules)
+            {
+                USR = LoginData[2];
+                LoginToCityPyO();
+            }
+            else if (!buildingManager.usingTwoModules)
+            {
+                USR = LoginData[0];
+                LoginToCityPyO();
+            }
         }
         
     }

@@ -13,6 +13,8 @@ public class LegendResults : MonoBehaviour
     [SerializeField]
     GameObject abmResult;
 
+    public GameObject ResultLegend { get => resultLegend; set => resultLegend = value; }
+
     public void AktivateLegendResults(string simName)
     {
         resultLegend.SetActive(true);

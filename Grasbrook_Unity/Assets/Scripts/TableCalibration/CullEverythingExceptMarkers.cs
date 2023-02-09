@@ -33,22 +33,20 @@ public class CullEverythingExceptMarkers : MonoBehaviour
         if (positionNumber == 0)
         {
             mainCamera.cullingMask = (1 << LayerMask.NameToLayer("UI"));
-            Debug.Log("First Calibration Time");
-            marker100.transform.localPosition = new Vector3(-0.031f, 1f, 0.479f);
-            marker101.transform.localPosition = new Vector3(-0.475f, 1f, 0.48f);
-            marker102.transform.localPosition = new Vector3(-0.476f, 1f, 0.033f);
-            marker103.transform.localPosition = new Vector3(-0.033f, 1f, 0.04f);
+            marker100.transform.localPosition = new Vector3(-0.024f, 1f, 0.542f);
+            marker101.transform.localPosition = new Vector3(-0.491f, 1f, 0.542f);
+            marker102.transform.localPosition = new Vector3(-0.491f, 1f, 0.087f);
+            marker103.transform.localPosition = new Vector3(-0.024f, 1f, 0.087f);
             calibrationSetup.Calib = 1;
             ToggleVisibility(calibrationSetup.Calib);
 
         }
         else if (positionNumber == 1)
         {
-            Debug.Log("Second Calibration Time");
-            marker100.transform.localPosition = new Vector3(0.474f, 1f, 0.48f);
-            marker101.transform.localPosition = new Vector3(0.03f, 1f, 0.482f);
-            marker102.transform.localPosition = new Vector3(0.024f, 1f, 0.031f);
-            marker103.transform.localPosition = new Vector3(0.467f, 1f, 0.03f);
+            marker100.transform.localPosition = new Vector3(0.486f, 1f, 0.542f);
+            marker101.transform.localPosition = new Vector3(0.019f, 1f, 0.542f);
+            marker102.transform.localPosition = new Vector3(0.019f, 1f, 0.087f);
+            marker103.transform.localPosition = new Vector3(0.486f, 1f, 0.087f);
             calibrationSetup.Calib = 2;
             ToggleVisibility(calibrationSetup.Calib);
         }
@@ -80,7 +78,6 @@ public class CullEverythingExceptMarkers : MonoBehaviour
         //}
         else if (positionNumber == 2)
         {
-            Debug.Log("WRONG");
             mainCamera.cullingMask = oldMask;
             ToggleVisibility(0);
         }
