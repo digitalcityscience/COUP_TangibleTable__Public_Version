@@ -390,8 +390,7 @@ public class CalculationModules_Interface : MonoBehaviour
 
     string GetAuthString()
     {
-
-        string auth = "city-scope" + ":" + "TcsB3Db8g4";
+        string auth = "YOUR_USERNAME" + ":" + "YOUR_PASSWORD";
         auth = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(auth));
         auth = "Basic " + auth;
         return auth;
